@@ -96,7 +96,6 @@ Fan-out with filter per bank    → [HDFC, ICICI, SBI, BOB, ...]    ✅
 | Layer | Technology |
 |---|---|
 | UI | Streamlit |
-| Agent | LangGraph (`create_react_agent`) |
 | LLM | Gemini / Groq / Anthropic / Ollama (switchable) |
 | Vector DB | Qdrant (local file mode) |
 | Bi-encoder | `BAAI/bge-large-en-v1.5` (1024-dim) |
