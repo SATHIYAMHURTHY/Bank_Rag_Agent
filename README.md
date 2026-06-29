@@ -105,35 +105,6 @@ Fan-out with filter per bank    → [HDFC, ICICI, SBI, BOB, ...]    ✅
 | Orchestration | LangChain + LangGraph |
 | Package manager | uv |
 
----
-
-## Project Structure
-
-```
-bank-rag-agent/
-├── .env                        ← API keys (see .env.example)
-├── .env.example
-├── .streamlit/
-│   └── config.toml             ← disables fileWatcher, sets log level
-├── data/
-│   ├── raw/                    ← scraped JSON files (gitignored)
-│   └── qdrant_db/              ← local Qdrant store (gitignored)
-└── src/
-    ├── scraper/
-    │   ├── sources.py          ← 20 source URLs, js_render flag per source
-    │   └── scraper.py          ← async hybrid scraper + TTL cache
-    ├── ingestion/
-    │   └── ingest.py           ← chunk, embed, upsert to Qdrant
-    ├── agent/
-    │   ├── tools.py            ← 4 LangChain tools, reranking, lru_cache
-    │   ├── graph.py            ← LangGraph agent wrapper
-    │   └── llm_factory.py      ← multi-provider LLM factory
-    └── ui/
-        └── app.py              ← Streamlit chat UI
-```
-
----
-
 ## Setup
 
 ### Prerequisites
