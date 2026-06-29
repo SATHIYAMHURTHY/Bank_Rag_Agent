@@ -1,23 +1,18 @@
 name: Scrape and Ingest
-
 on:
   schedule:
     - cron: '0 2 * * *'
   workflow_dispatch:
-
 jobs:
   ingest:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Install dependencies
         run: |
           pip install \
@@ -28,19 +23,11 @@ jobs:
             qdrant-client sentence-transformers \
             beautifulsoup4 lxml python-dotenv
           playwright install chromium --with-deps
-
-      - name: Scrape all sources
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          python src/scraper/scraper.py
-
-      - name: Ingest into Qdrant Cloud
+      - name: Scrape and ingest
         env:
           QDRANT_URL:     ${{ secrets.QDRANT_URL }}
           QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
+          python src/scraper/scraper.py
           python src/ingestion/ingest.py
-
-  
