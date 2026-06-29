@@ -1,14 +1,11 @@
 name: Scrape and Ingest
-
 on:
   schedule:
-    - cron: '0 2 * * *'    # 2am UTC daily
-  workflow_dispatch:         # manual trigger from GitHub Actions tab
-
+    - cron: '0 2 * * *'
+  workflow_dispatch:
 jobs:
   ingest:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -29,10 +26,12 @@ jobs:
             beautifulsoup4 lxml python-dotenv
           playwright install chromium --with-deps
 
-      - name: Scrape and ingest
+      - name: Step 1 - Scrape all sources
+        run: python src/scraper/scraper.py
+
+      - name: Step 2 - Ingest into Qdrant Cloud
         env:
-          QDRANT_URL:      ${{ secrets.QDRANT_URL }}
-          QDRANT_API_KEY:  ${{ secrets.QDRANT_API_KEY }}
-          GEMINI_API_KEY:  ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          python src/ingestion/ingest.py
+          QDRANT_URL:     ${{ secrets.QDRANT_URL }}
+          QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python src/ingestion/ingest.py
