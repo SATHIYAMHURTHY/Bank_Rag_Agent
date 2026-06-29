@@ -1,0 +1,16 @@
+aiohttp
+aiofiles
+playwright
+langchain
+langchain-community
+langchain-text-splitters
+langchain-huggingface
+langchain-qdrant
+langchain-google-genai
+langchain-anthropic
+langchain-groq
+langchain-ollama
+qdrant-client
+sentence-transformers
+streamlit
+python-dotenv
