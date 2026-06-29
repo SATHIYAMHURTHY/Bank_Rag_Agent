@@ -9,10 +9,12 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Install dependencies
         run: |
           pip install \
@@ -23,11 +25,13 @@ jobs:
             qdrant-client sentence-transformers \
             beautifulsoup4 lxml python-dotenv
           playwright install chromium --with-deps
-      - name: Scrape and ingest
+
+      - name: Step 1 - Scrape all sources
+        run: python src/scraper/scraper.py
+
+      - name: Step 2 - Ingest into Qdrant Cloud
         env:
           QDRANT_URL:     ${{ secrets.QDRANT_URL }}
           QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: |
-          python src/scraper/scraper.py
-          python src/ingestion/ingest.py
+        run: python src/ingestion/ingest.py
