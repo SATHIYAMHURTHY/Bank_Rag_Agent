@@ -27,10 +27,13 @@ jobs:
           playwright install chromium --with-deps
 
       - name: Step 1 - Scrape all sources
+        env:
+          PYTHONPATH: ${{ github.workspace }}
         run: python src/scraper/scraper.py
 
       - name: Step 2 - Ingest into Qdrant Cloud
         env:
+          PYTHONPATH: ${{ github.workspace }}
           QDRANT_URL:     ${{ secrets.QDRANT_URL }}
           QDRANT_API_KEY: ${{ secrets.QDRANT_API_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
