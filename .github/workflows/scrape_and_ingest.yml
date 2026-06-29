@@ -1,0 +1,38 @@
+name: Scrape and Ingest
+
+on:
+  schedule:
+    - cron: '0 2 * * *'    # 2am UTC daily
+  workflow_dispatch:         # manual trigger from GitHub Actions tab
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install \
+            aiohttp aiofiles playwright \
+            langchain langchain-community langchain-text-splitters \
+            langchain-huggingface langchain-qdrant \
+            langchain-google-genai \
+            qdrant-client sentence-transformers \
+            beautifulsoup4 lxml python-dotenv
+          playwright install chromium --with-deps
+
+      - name: Scrape and ingest
+        env:
+          QDRANT_URL:      ${{ secrets.QDRANT_URL }}
+          QDRANT_API_KEY:  ${{ secrets.QDRANT_API_KEY }}
+          GEMINI_API_KEY:  ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python src/ingestion/ingest.py
